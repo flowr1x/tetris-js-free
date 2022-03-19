@@ -1,4 +1,14 @@
 export default class View {
+    colors = {
+        1: "#6df7c1",
+        2: "#393457",
+        3: "#f7e476",
+        4: "#c92464",
+        5: "#f48cb6",
+        6: "#11adc1",
+        7: "#6a3771"
+    };
+
     constructor(container, width, height, rows, columns) {
         this.container = container;
         this.width = width;
@@ -11,6 +21,7 @@ export default class View {
 
         container.append(this.canvas);
 
+        this.mainColor = "#606c81";
 
         this.playfieldBorderWidth = 2;
         this.playfieldX = this.playfieldBorderWidth;
@@ -39,7 +50,7 @@ export default class View {
     }
 
     renderStartScreen() {
-        this.ctx.fillStyle = "white";
+        this.ctx.fillStyle = this.mainColor;
         this.ctx.textAlign = "center";
         this.ctx.textBaseline = "middle"
         this.ctx.font = "24px 'Arial'";
@@ -48,17 +59,17 @@ export default class View {
     }
 
     renderPauseScreen() {
-        this.ctx.fillStyle = "white";
+        this.ctx.fillStyle = this.mainColor;
         this.ctx.textAlign = "center";
         this.ctx.textBaseline = "middle"
         this.ctx.font = "24px 'Arial'";
 
-        this.ctx.fillText("Pause! Press Esc to Game", this.playfieldInnerWidth / 2, this.playfieldInnerHeight / 2);
+        this.ctx.fillText("Pause! Press Enter to Game", this.playfieldInnerWidth / 2, this.playfieldInnerHeight / 2);
     }
 
     renderGameOverScreen({ score }) {
         this.clearScreen();
-        this.ctx.fillStyle = "white";
+        this.ctx.fillStyle = this.mainColor;
         this.ctx.textAlign = "center";
         this.ctx.textBaseline = "middle"
         this.ctx.font = "24px 'Arial'";
@@ -70,7 +81,7 @@ export default class View {
     renderPanel({ level, lines, score, nextFigure }) {
         this.ctx.textAlign = "start";
         this.ctx.textBaseline = "top";
-        this.ctx.fillStyle = "#9ceb9c";
+        this.ctx.fillStyle = this.mainColor;
         this.ctx.font = "16px 'Arial'";
 
         this.ctx.fillText(`Score: ${score}`, this.panelX, this.panelY + 0);
@@ -88,7 +99,8 @@ export default class View {
                             this.panelX + (x * this.blockWidth * this.figurePanelScale),
                             this.panelY + 100 + (y * this.blockHeight * this.figurePanelScale),
                             this.blockWidth * this.figurePanelScale,
-                            this.blockHeight * this.figurePanelScale);
+                            this.blockHeight * this.figurePanelScale,
+                            this.colors[block]);
                 }
             }
         }
@@ -110,19 +122,22 @@ export default class View {
                         this.playfieldX + (x * this.blockWidth),
                         this.playfieldY + (y * this.blockHeight), 
                         this.blockWidth, 
-                        this.blockHeight);
+                        this.blockHeight,
+                        this.colors[column]);
                 }
             }  
         }
 
-        this.ctx.strokeStyle = "#9ceb9c";
+        this.ctx.strokeStyle = "#606c81";
         this.ctx.strokeRect(0, 0, this.playfieldWidth, this.playfieldHeight);
         this.ctx.lineWidth = this.playfieldBorderWidth;
     }
 
-    renderBlock(x, y, blockWidth, blockHeight) {
-        this.ctx.strokeStyle = "#9ceb9c";
+    renderBlock(x, y, blockWidth, blockHeight, color = "#333") {
+        this.ctx.fillStyle = color;
+        this.ctx.strokeStyle = "#606c81";
         this.ctx.lineWidth = 2;
+        this.ctx.fillRect(x, y, blockWidth, blockHeight);
         this.ctx.strokeRect(x, y, blockWidth, blockHeight);
     }
 }
